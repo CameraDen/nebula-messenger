@@ -1,0 +1,2 @@
+import { defineConfig } from '@playwright/test';
+export default defineConfig({testDir:'tests/e2e',timeout:45000,workers:1,use:{baseURL:'http://nebula.test:4173',trace:'retain-on-failure',launchOptions:{args:['--host-resolver-rules=MAP nebula.test 127.0.0.1','--no-proxy-server']},...(process.env.PLAYWRIGHT_CHANNEL?{channel:process.env.PLAYWRIGHT_CHANNEL}:{})},webServer:{command:'node scripts/e2e-server.mjs',url:'http://127.0.0.1:4173/api/health',reuseExistingServer:false,timeout:60000}});

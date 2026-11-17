@@ -1,0 +1,10 @@
+import 'dotenv/config';
+import { mkdirSync, openSync, closeSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { spawnSync } from 'node:child_process';
+process.env.DATABASE_URL ||= 'file:./dev.db';
+if(!process.env.DATABASE_URL.startsWith('file:'))throw new Error('This schema uses SQLite; DATABASE_URL must start with file:');
+const path=resolve('prisma',process.env.DATABASE_URL.slice(5));
+mkdirSync(dirname(path),{recursive:true});closeSync(openSync(path,'a'));
+const result=spawnSync(process.execPath,['node_modules/prisma/build/index.js','migrate','deploy'],{stdio:'inherit',env:process.env});
+process.exit(result.status??1);
